@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
+const express=require('express');
 
 const createUser = async function (abcd, xyz) {
   //You can name the req, res objects anything.
@@ -80,11 +81,22 @@ const updateUser = async function (req, res) {
   }
 
   let userData = req.body;
-  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, userData);
+  let updatedUser = await userModel.findOneAndUpdate({ _id: userId }, {new:true});
   res.send({ status: updatedUser, data: updatedUser });
-};
 
+};
+const deleteUser =async function(req,res)
+{
+let id = req.params.userId;
+let userdel = await userModel.findOneAndUpdate(
+  {id:id},{$set:{isdeleted:true}},
+  {new:true}
+)
+res.send({status:true})
+
+}
 module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
+module.exports.deleteUser=deleteUser;
